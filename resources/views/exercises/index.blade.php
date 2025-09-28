@@ -1,46 +1,21 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Painel</h2>
-            <a href="{{ url('/exercises/create') }}" class="px-4 py-2 bg-[#F53003] text-white rounded-sm">Criar exercício</a>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Meus Exercícios</h2>
+            <a href="{{ route('exercises.create') }}" class="px-4 py-2 bg-[#F53003] text-white rounded-sm">Novo exercício</a>
         </div>
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @if(session('success'))
-                <div class="mb-4 text-sm text-green-600">{{ session('success') }}</div>
-            @endif
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-                <div class="p-4 bg-white dark:bg-[#161615] rounded-lg border border-[#e3e3e0] dark:border-[#3E3E3A]">
-                    <div class="text-sm text-[#706f6c] dark:text-[#A1A09A]">Total de exercícios</div>
-                    <div class="text-2xl font-semibold text-[#1b1b18] dark:text-[#EDEDEC]">{{ $totalExercises ?? 0 }}</div>
-                </div>
-
-                <div class="p-4 bg-white dark:bg-[#161615] rounded-lg border border-[#e3e3e0] dark:border-[#3E3E3A]">
-                    <div class="text-sm text-[#706f6c] dark:text-[#A1A09A]">Tempo total (estimado)</div>
-                    @php
-                        $hours = intdiv($totalMinutes ?? 0, 60);
-                        $minutes = ($totalMinutes ?? 0) % 60;
-                    @endphp
-                    <div class="text-2xl font-semibold text-[#1b1b18] dark:text-[#EDEDEC]">{{ $hours }}h {{ $minutes }}m</div>
-                </div>
-
-                <div class="p-4 bg-white dark:bg-[#161615] rounded-lg border border-[#e3e3e0] dark:border-[#3E3E3A]">
-                    <div class="text-sm text-[#706f6c] dark:text-[#A1A09A]">Calorias estimadas</div>
-                    <div class="text-2xl font-semibold text-[#1b1b18] dark:text-[#EDEDEC]">{{ number_format($totalCalories ?? 0, 0, ',', '.') }} kcal</div>
-                </div>
-            </div>
-
+        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-[#161615] rounded-lg border border-[#e3e3e0] dark:border-[#3E3E3A] shadow-sm overflow-hidden">
-                <div class="p-4 border-b border-[#e3e3e0] dark:border-[#3E3E3A] flex items-center justify-between">
-                    <h3 class="font-medium text-[#1b1b18] dark:text-[#EDEDEC]">Exercícios recentes</h3>
-                    <a href="{{ url('/exercises') }}" class="text-[13px] text-[#706f6c] dark:text-[#A1A09A] underline">Ver todos</a>
-                </div>
-
                 <div class="p-4">
+                    @if(session('success'))
+                        <div class="mb-4 text-sm text-green-600">{{ session('success') }}</div>
+                    @endif
+
                     @if($exercises->isEmpty())
-                        <div class="text-sm text-[#706f6c] dark:text-[#A1A09A]">Nenhum exercício registrado ainda.</div>
+                        <div class="text-sm text-[#706f6c] dark:text-[#A1A09A]">Nenhum exercício registrado.</div>
                     @else
                         <table class="w-full text-left text-[13px] text-[#1b1b18] dark:text-[#EDEDEC]">
                             <thead>
@@ -72,10 +47,13 @@
                                 @endforeach
                             </tbody>
                         </table>
+
+                        <div class="mt-4">
+                            {{ $exercises->links() }}
+                        </div>
                     @endif
                 </div>
             </div>
-        </div>       
+        </div>
     </div>
-    @include('layouts.footer')
 </x-app-layout>

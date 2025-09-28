@@ -7,8 +7,45 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+use Illuminate\Support\Facades\Auth;
+use App\Models\Exercise;
+
+use Illuminate\Http\Request as HttpRequest;
+
+Route::get('/dashboard', function (HttpRequest $request) {
+    $user = Auth::user();
+
+    if (! $user) {
+        return view('dashboard', [
+            'exercises' => collect(),
+            'totalExercises' => 0,
+            'totalMinutes' => 0,
+            'totalCalories' => 0,
+            'filterStart' => null,
+            'filterEnd' => null,
+            'filterName' => null,
+        ]);
+    }
+
+    $filterStart = $request->query('start_date');
+    $filterEnd = $request->query('end_date');
+    $filterName = $request->query('name');
+
+    $query = $user->exercises()->when($filterStart, function ($q) use ($filterStart) {
+        $q->where('date', '>=', $filterStart);
+    })->when($filterEnd, function ($q) use ($filterEnd) {
+        $q->where('date', '<=', $filterEnd);
+    })->when($filterName, function ($q) use ($filterName) {
+        $q->where('name', 'like', "%{$filterName}%");
+    });
+
+    $totalExercises = (int) $query->count();
+    $totalMinutes = (int) $query->sum('duration_minutes');
+    $totalCalories = (int) $query->sum('calories');
+
+    $exercises = $query->latest('date')->take(5)->get();
+
+    return view('dashboard', compact('exercises', 'totalExercises', 'totalMinutes', 'totalCalories', 'filterStart', 'filterEnd', 'filterName'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -19,6 +56,10 @@ Route::middleware('auth')->group(function () {
     // Exercises
     Route::get('/exercises/create', [\App\Http\Controllers\ExerciseController::class, 'create'])->name('exercises.create');
     Route::post('/exercises', [\App\Http\Controllers\ExerciseController::class, 'store'])->name('exercises.store');
+    Route::get('/exercises', [\App\Http\Controllers\ExerciseController::class, 'index'])->name('exercises.index');
+    Route::get('/exercises/{exercise}/edit', [\App\Http\Controllers\ExerciseController::class, 'edit'])->name('exercises.edit');
+    Route::put('/exercises/{exercise}', [\App\Http\Controllers\ExerciseController::class, 'update'])->name('exercises.update');
+    Route::delete('/exercises/{exercise}', [\App\Http\Controllers\ExerciseController::class, 'destroy'])->name('exercises.destroy');
 });
 
 require __DIR__.'/auth.php';
