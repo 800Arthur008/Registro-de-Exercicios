@@ -1,0 +1,11 @@
+{
+  "name": "usuario/registro-de-exercicios",
+  "description": "Sistema para gerenciamento de atividades físicas",
+  "type": "project",
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  }
+}
