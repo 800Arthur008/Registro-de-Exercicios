@@ -14,16 +14,22 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
-            </div>
+    <body class="font-sans antialiased bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] dark:text-[#EDEDEC]">
+        <div class="min-h-screen flex items-center justify-center px-4 py-12">
+            <div class="w-full max-w-md">
+                <header class="mb-6 text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 mx-auto rounded-md bg-[#F53003] dark:bg-[#FF4433] text-white font-bold">RE</div>
+                    <h1 class="mt-4 text-2xl font-semibold">{{ config('app.name', 'Registro de Exercícios') }}</h1>
+                    <p class="mt-1 text-[13px] text-[#706f6c] dark:text-[#A1A09A]">Acesse sua conta para gerenciar suas atividades físicas</p>
+                </header>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
+                <div class="bg-white dark:bg-[#161615] border border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg shadow-lg overflow-hidden p-6">
+                    {{ $slot }}
+                </div>
+
+                <footer class="mt-6 text-center text-sm text-[#706f6c] dark:text-[#A1A09A]">
+                    <a href="/" class="underline hover:text-[#1b1b18] dark:hover:text-white">Voltar para a página inicial</a>
+                </footer>
             </div>
         </div>
     </body>
