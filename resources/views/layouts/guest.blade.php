@@ -18,7 +18,7 @@
         <div class="min-h-screen flex items-center justify-center px-4 py-12">
             <div class="w-full max-w-md">
                 <header class="mb-6 text-center">
-                    <div class="inline-flex items-center justify-center w-16 h-16 mx-auto rounded-md bg-[#F53003] dark:bg-[#FF4433] text-white font-bold">RE</div>
+                    <img src="{{ asset('logo.jpeg') }}" alt="Logo" class="w-16 h-16 mx-auto rounded-md object-cover bg-[#F53003] dark:bg-[#FF4433]" />
                     <h1 class="mt-4 text-2xl font-semibold">{{ config('app.name', 'Registro de Exercícios') }}</h1>
                     <p class="mt-1 text-[13px] text-[#706f6c] dark:text-[#A1A09A]">Acesse sua conta para gerenciar suas atividades físicas</p>
                 </header>
