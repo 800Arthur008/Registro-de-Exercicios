@@ -38,6 +38,21 @@
                     <a href="{{ url('/exercises') }}" class="text-[13px] text-[#706f6c] dark:text-[#A1A09A] underline">Ver todos</a>
                 </div>
 
+                <!-- Formulário de busca -->
+                <form method="GET" action="{{ route('dashboard') }}" class="p-4 flex flex-col md:flex-row gap-2 md:items-end border-b border-[#e3e3e0] dark:border-[#3E3E3A]">
+                    <div>
+                        <label for="name" class="block text-xs text-[#706f6c] dark:text-[#A1A09A]">Atividade</label>
+                        <input type="text" name="name" id="name" value="{{ old('name', $filterName) }}" class="border border-[#e3e3e0] dark:border-[#3E3E3A] rounded px-2 py-1 bg-white dark:bg-[#232320] text-[#1b1b18] dark:text-[#EDEDEC]" placeholder="Buscar por nome">
+                    </div>
+                    <div>
+                        <label for="date" class="block text-xs text-[#706f6c] dark:text-[#A1A09A]">Data do exercício</label>
+                        <input type="date" name="date" id="date" value="{{ old('date', $filterDate ?? null) }}" class="border border-[#e3e3e0] dark:border-[#3E3E3A] rounded px-2 py-1 bg-white dark:bg-[#232320] text-[#1b1b18] dark:text-[#EDEDEC]">
+                    </div>
+                    <div>
+                        <button type="submit" class="px-4 py-2 bg-[#F53003] text-white rounded-sm mt-4 md:mt-0">Buscar</button>
+                    </div>
+                </form>
+
                 <div class="p-4">
                     @if($exercises->isEmpty())
                         <div class="text-sm text-[#706f6c] dark:text-[#A1A09A]">Nenhum exercício registrado ainda.</div>
