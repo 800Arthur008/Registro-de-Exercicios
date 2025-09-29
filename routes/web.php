@@ -27,17 +27,16 @@ Route::get('/dashboard', function (HttpRequest $request) {
         ]);
     }
 
-    $filterStart = $request->query('start_date');
-    $filterEnd = $request->query('end_date');
+    $filterDate = $request->query('date');
     $filterName = $request->query('name');
 
-    $query = $user->exercises()->when($filterStart, function ($q) use ($filterStart) {
-        $q->where('date', '>=', $filterStart);
-    })->when($filterEnd, function ($q) use ($filterEnd) {
-        $q->where('date', '<=', $filterEnd);
-    })->when($filterName, function ($q) use ($filterName) {
-        $q->where('name', 'like', "%{$filterName}%");
-    });
+    $query = $user->exercises()
+        ->when($filterDate, function ($q) use ($filterDate) {
+            $q->whereDate('date', $filterDate);
+        })
+        ->when($filterName, function ($q) use ($filterName) {
+            $q->where('name', 'like', "%{$filterName}%");
+        });
 
     $totalExercises = (int) $query->count();
     $totalMinutes = (int) $query->sum('duration_minutes');
@@ -45,7 +44,14 @@ Route::get('/dashboard', function (HttpRequest $request) {
 
     $exercises = $query->latest('date')->take(5)->get();
 
-    return view('dashboard', compact('exercises', 'totalExercises', 'totalMinutes', 'totalCalories', 'filterStart', 'filterEnd', 'filterName'));
+    return view('dashboard', [
+        'exercises' => $exercises,
+        'totalExercises' => $totalExercises,
+        'totalMinutes' => $totalMinutes,
+        'totalCalories' => $totalCalories,
+        'filterDate' => $filterDate,
+        'filterName' => $filterName,
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
