@@ -13,7 +13,6 @@ class ExerciseController extends Controller
         $this->middleware('auth');
     }
 
-    // List all exercises for the authenticated user (paginated)
     public function index()
     {
         $user = Auth::user();
